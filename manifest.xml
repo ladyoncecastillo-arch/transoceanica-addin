@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OfficeApp xmlns="http://schemas.microsoft.com/office/appforoffice/1.1"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns:bt="http://schemas.microsoft.com/office/officeappbasictypes/1.0"
+           xsi:type="MailApp">
+  <Id>a1b2c3d4-e5f6-7890-abcd-ef1234567890</Id>
+  <Version>1.0.0</Version>
+  <ProviderName>Transoceanica</ProviderName>
+  <DefaultLocale>es-EC</DefaultLocale>
+  <DisplayName DefaultValue="Facturación Transoceanica"/>
+  <Description DefaultValue="Busca y reenvía facturas de Seed Billing al cliente."/>
+  <IconUrl DefaultValue="https://ladyoncecastillo-arch.github.io/transoceanica-addin/assets/icon-64.png"/>
+  <HighResolutionIconUrl DefaultValue="https://ladyoncecastillo-arch.github.io/transoceanica-addin/assets/icon-128.png"/>
+  <SupportUrl DefaultValue="mailto:customerser@transoceanica.com.ec"/>
+  <AppDomains>
+    <AppDomain>https://ladyoncecastillo-arch.github.io</AppDomain>
+  </AppDomains>
+  <Hosts><Host Name="Mailbox"/></Hosts>
+  <Requirements><Sets><Set Name="Mailbox" MinVersion="1.3"/></Sets></Requirements>
+  <FormSettings>
+    <Form xsi:type="ItemRead">
+      <DesktopSettings>
+        <SourceLocation DefaultValue="https://ladyoncecastillo-arch.github.io/transoceanica-addin/taskpane.html"/>
+        <RequestedHeight>550</RequestedHeight>
+      </DesktopSettings>
+    </Form>
+  </FormSettings>
+  <Permissions>ReadWriteMailbox</Permissions>
+  <Rule xsi:type="RuleCollection" Mode="Or">
+    <Rule xsi:type="ItemIs" ItemType="Message" FormType="Read"/>
+  </Rule>
+  <VersionOverrides xmlns="http://schemas.microsoft.com/office/mailappversionoverrides" xsi:type="VersionOverridesV1_0">
+    <Requirements><bt:Sets DefaultMinVersion="1.3"><bt:Set Name="Mailbox"/></bt:Sets></Requirements>
+    <Hosts>
+      <Host xsi:type="MailHost">
+        <DesktopFormFactor>
+          <FunctionFile resid="Commands.Url"/>
+          <ExtensionPoint xsi:type="MessageReadCommandSurface">
+            <OfficeTab id="TabDefault">
+              <Group id="msgReadGroup">
+                <Label resid="GroupLabel"/>
+                <Control xsi:type="Button" id="msgReadOpenPaneButton">
+                  <Label resid="TaskpaneButton.Label"/>
+                  <Supertip>
+                    <Title resid="TaskpaneButton.Label"/>
+                    <Description resid="TaskpaneButton.Tooltip"/>
+                  </Supertip>
+                  <Icon>
+                    <bt:Image size="16" resid="Icon.16x16"/>
+                    <bt:Image size="32" resid="Icon.32x32"/>
+                    <bt:Image size="80" resid="Icon.80x80"/>
+                  </Icon>
+                  <Action xsi:type="ShowTaskpane">
+                    <TaskpaneId>ButtonId1</TaskpaneId>
+                    <SourceLocation resid="Taskpane.Url"/>
+                  </Action>
+                </Control>
+              </Group>
+            </OfficeTab>
+          </ExtensionPoint>
+        </DesktopFormFactor>
+      </Host>
+    </Hosts>
+    <Resources>
+      <bt:Images>
+        <bt:Image id="Icon.16x16" DefaultValue="https://ladyoncecastillo-arch.github.io/transoceanica-addin/assets/icon-16.png"/>
+        <bt:Image id="Icon.32x32" DefaultValue="https://ladyoncecastillo-arch.github.io/transoceanica-addin/assets/icon-32.png"/>
+        <bt:Image id="Icon.80x80" DefaultValue="https://ladyoncecastillo-arch.github.io/transoceanica-addin/assets/icon-80.png"/>
+      </bt:Images>
+      <bt:Urls>
+        <bt:Url id="Commands.Url" DefaultValue="https://ladyoncecastillo-arch.github.io/transoceanica-addin/commands.html"/>
+        <bt:Url id="Taskpane.Url" DefaultValue="https://ladyoncecastillo-arch.github.io/transoceanica-addin/taskpane.html"/>
+      </bt:Urls>
+      <bt:ShortStrings>
+        <bt:String id="GroupLabel" DefaultValue="Transoceanica"/>
+        <bt:String id="TaskpaneButton.Label" DefaultValue="Enviar Factura"/>
+      </bt:ShortStrings>
+      <bt:LongStrings>
+        <bt:String id="TaskpaneButton.Tooltip" DefaultValue="Busca la factura en Seed Billing y la reenvía al cliente."/>
+      </bt:LongStrings>
+    </Resources>
+  </VersionOverrides>
+</OfficeApp>  
