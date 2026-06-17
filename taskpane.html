@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Facturación Transoceanica</title>
+  <script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js" type="text/javascript"></script>
+  <style>
+    :root { --navy:#0B2545;--ocean:#1A6B9A;--sky:#E8F4FD;--accent:#F0A500;--green:#1E7E34;--red:#C0392B;--text:#1A1A2E;--muted:#6B7280;--border:#D1E3F0;--white:#FFFFFF; }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--white);color:var(--text);font-size:13px;min-height:100vh;display:flex;flex-direction:column}
+    .header{background:var(--navy);padding:14px 16px 12px;display:flex;align-items:center;gap:10px}
+    .header-logo{width:32px;height:32px;background:var(--accent);border-radius:6px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;color:var(--navy);flex-shrink:0}
+    .header-title{color:var(--white)}.header-title h1{font-size:14px;font-weight:700}.header-title p{font-size:11px;color:#8FB8D8;margin-top:1px}
+    .body{flex:1;padding:16px;display:flex;flex-direction:column;gap:14px}
+    .bkbl-card{background:var(--sky);border:1.5px solid var(--border);border-radius:8px;padding:12px 14px}
+    .bkbl-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;color:var(--ocean);margin-bottom:6px}
+    .bkbl-value{font-size:18px;font-weight:700;color:var(--navy);min-height:26px;display:flex;align-items:center;gap:8px}
+    .bkbl-value span.empty{font-size:13px;font-weight:400;color:var(--muted)}
+    .bkbl-subject{margin-top:6px;font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .bkbl-edit{display:flex;gap:6px;margin-top:8px}
+    .bkbl-edit input{flex:1;border:1.5px solid var(--border);border-radius:6px;padding:6px 10px;font-size:13px;font-family:inherit;color:var(--text);background:var(--white);outline:none}
+    .bkbl-edit button{padding:6px 10px;border:none;border-radius:6px;background:var(--ocean);color:var(--white);font-size:11px;font-weight:600;cursor:pointer}
+    .steps{display:flex;flex-direction:column;gap:8px}
+    .step{border:1.5px solid var(--border);border-radius:8px;overflow:hidden;transition:border-color .2s}
+    .step.active{border-color:var(--ocean)}.step.done{border-color:var(--green)}.step.error{border-color:var(--red)}
+    .step-header{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--white)}
+    .step-icon{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0;background:#EEF2F7;color:var(--muted)}
+    .step.active .step-icon{background:var(--ocean);color:var(--white)}.step.done .step-icon{background:var(--green);color:var(--white)}.step.error .step-icon{background:var(--red);color:var(--white)}
+    .step-info{flex:1}.step-info h3{font-size:12px;font-weight:600;color:var(--text)}.step-info p{font-size:11px;color:var(--muted);margin-top:1px}
+    .step-badge{font-size:10px;font-weight:600;padding:2px 7px;border-radius:20px;text-transform:uppercase}
+    .badge-wait{background:#EEF2F7;color:var(--muted)}.badge-active{background:#DBEAFE;color:var(--ocean)}.badge-done{background:#D1FAE5;color:var(--green)}.badge-error{background:#FEE2E2;color:var(--red)}
+    .found-email{margin:0 12px 10px;background:#F0FFF4;border:1px solid #A7F3C0;border-radius:6px;padding:10px 12px;display:none}
+    .found-email.visible{display:block}.fe-label{font-size:10px;font-weight:600;color:var(--green);text-transform:uppercase;margin-bottom:4px}.fe-subject{font-size:12px;font-weight:600;color:var(--text)}.fe-meta{font-size:11px;color:var(--muted);margin-top:2px}
+    .msg-section{display:none}.msg-section.visible{display:block}
+    .msg-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;color:var(--ocean);margin-bottom:6px;display:flex;align-items:center;justify-content:space-between}
+    .msg-label a{font-size:10px;text-transform:none;color:var(--ocean);cursor:pointer;text-decoration:underline;font-weight:400}
+    textarea{width:100%;border:1.5px solid var(--border);border-radius:6px;padding:10px;font-size:12px;font-family:inherit;color:var(--text);resize:vertical;min-height:110px;outline:none;line-height:1.5}
+    .btn-send{width:100%;padding:12px;background:var(--navy);color:var(--white);border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px}
+    .btn-send:hover:not(:disabled){background:var(--ocean)}.btn-send:disabled{opacity:.5;cursor:not-allowed}
+    .alert{border-radius:8px;padding:10px 12px;font-size:12px;line-height:1.5;display:none}
+    .alert.visible{display:block}.alert.success{background:#D1FAE5;color:#065F46;border:1px solid #6EE7B7}.alert.error{background:#FEE2E2;color:#7F1D1D;border:1px solid #FCA5A5}.alert.info{background:#DBEAFE;color:#1E3A8A;border:1px solid #93C5FD}
+    .footer{padding:10px 16px;border-top:1px solid var(--border);font-size:10px;color:var(--muted);text-align:center}
+    .spinner{width:14px;height:14px;border:2px solid rgba(255,255,255,.3);border-top-color:var(--white);border-radius:50%;animation:spin .7s linear infinite;display:none}
+    .spinner.visible{display:inline-block}@keyframes spin{to{transform:rotate(360deg)}}
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="header-logo">T</div>
+    <div class="header-title"><h1>Envío de Factura</h1><p>Transoceanica · customerser@transoceanica.com.ec</p></div>
+  </div>
+  <div class="body">
+    <div class="bkbl-card">
+      <div class="bkbl-label">BK / BL detectado del asunto</div>
+      <div class="bkbl-value" id="bkblDisplay"><span class="empty">Leyendo correo...</span></div>
+      <div class="bkbl-subject" id="subjectDisplay"></div>
+      <div class="bkbl-edit">
+        <input type="text" id="bkblManual" placeholder="Ingresar BK/BL manualmente..."/>
+        <button onclick="applyManualBkbl()">Usar</button>
+      </div>
+    </div>
+    <div class="steps">
+      <div class="step" id="step1"><div class="step-header"><div class="step-icon">1</div><div class="step-info"><h3>Detectar BK/BL</h3><p>Extrae el número del asunto del correo del cliente</p></div><span class="step-badge badge-wait" id="badge1">Espera</span></div></div>
+      <div class="step" id="step2"><div class="step-header"><div class="step-icon">2</div><div class="step-info"><h3>Buscar en Seed Billing</h3><p>Localiza el correo con factura y XML en tu Outlook</p></div><span class="step-badge badge-wait" id="badge2">Espera</span></div><div class="found-email" id="foundEmail"><div class="fe-label">✓ Correo encontrado</div><div class="fe-subject" id="foundSubject"></div><div class="fe-meta" id="foundMeta"></div></div></div>
+      <div class="step" id="step3"><div class="step-header"><div class="step-icon">3</div><div class="step-info"><h3>Reenviar al cliente</h3><p>Adjunta la factura y envía con mensaje predeterminado</p></div><span class="step-badge badge-wait" id="badge3">Espera</span></div></div>
+    </div>
+    <div class="alert" id="mainAlert"></div>
+    <div class="msg-section" id="msgSection"><div class="msg-label">Mensaje al cliente<a onclick="resetMessage()">↺ Restaurar</a></div><textarea id="msgBody"></textarea></div>
+    <button class="btn-send" id="btnSend" onclick="runFlow()" disabled><span class="spinner" id="btnSpinner"></span><span id="btnLabel">Enviar Factura al Cliente</span></button>
+  </div>
+  <div class="footer">customerser@transoceanica.com.ec · Add-in v1.0</div>
+  <script src="taskpane.js"></script>
+</body>
+</html>
